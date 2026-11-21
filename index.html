@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover the best deals, offers and products across multiple shopping platforms.">
+  <title>Affiliate Marketplace - Best Deals</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <a href="/" class="logo">Affiliate Marketplace</a>
+
+    <form id="searchForm">
+      <input type="search" id="searchInput"
+        placeholder="Search products, brands and deals...">
+      <button type="submit">Search</button>
+    </form>
+
+    <button id="menuButton" aria-label="Open menu">☰</button>
+  </header>
+
+  <!-- NAVIGATION -->
+  <nav class="navigation">
+    <a href="/">Home</a>
+    <a href="#categories">Categories</a>
+    <a href="#products">Products</a>
+    <a href="#about">About Us</a>
+    <a href="#contact">Contact Us</a>
+  </nav>
+
+  <main>
+
+    <!-- HERO CAROUSEL -->
+    <section class="hero" id="hero">
+      <div class="carousel" id="carousel">
+        <div class="slide active">
+          <h1>Discover Amazing Deals</h1>
+          <p>Find the best products and offers in one place.</p>
+          <a href="#products">Explore Products</a>
+        </div>
+        <div class="slide">
+          <h2>Top Shopping Platforms</h2>
+          <p>Explore deals from your favourite brands.</p>
+          <a href="#categories">Explore Categories</a>
+        </div>
+        <div class="slide">
+          <h2>Daily Offers & Discounts</h2>
+          <p>Discover exciting deals every day.</p>
+          <a href="#products">Shop Deals</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section id="categories">
+      <h2>Shop By Categories</h2>
+      <div id="categoryList" class="category-grid">
+        <p>Categories will load here.</p>
+      </div>
+    </section>
+
+    <!-- SUBCATEGORIES -->
+    <section id="subcategories">
+      <h2>Popular Subcategories</h2>
+      <div id="subcategoryList" class="category-grid">
+        <p>Select a category to explore subcategories.</p>
+      </div>
+    </section>
+
+    <!-- FEATURED PRODUCTS -->
+    <section id="products">
+      <h2>Featured Products & Best Deals</h2>
+
+      <div class="filters">
+        <select id="platformFilter">
+          <option value="">All Affiliate Platforms</option>
+          <option>Amazon</option>
+          <option>Flipkart</option>
+          <option>Myntra</option>
+          <option>EarnKaro</option>
+          <option>Cuelinks</option>
+        </select>
+
+        <select id="typeFilter">
+          <option value="">All Product Types</option>
+          <option value="Physical">Physical</option>
+          <option value="Digital">Digital</option>
+        </select>
+      </div>
+
+      <div id="productList" class="product-grid">
+        <p>Products will load from Cloudflare D1.</p>
+      </div>
+
+      <button id="loadMore">Load More Products</button>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <h2>About Us</h2>
+      <p>
+        Welcome to Affiliate Marketplace.
+        Discover products, compare offers and explore deals
+        from different affiliate shopping platforms.
+      </p>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>For enquiries and support, contact our team.</p>
+    </section>
+
+  </main>
+
+  <!-- WHATSAPP -->
+  <a class="whatsapp-button"
+     href="https://wa.me/"
+     target="_blank"
+     rel="noopener">
+    WhatsApp
+  </a>
+
+  <!-- FOOTER -->
+  <footer>
+    <h3>Affiliate Marketplace</h3>
+
+    <div class="footer-links">
+      <a href="about-us.html">About Us</a>
+      <a href="contact-us.html">Contact Us</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html">Terms & Conditions</a>
+      <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
+    </div>
+
+    <p>Affiliate Platforms: Amazon, Flipkart, Myntra,
+       EarnKaro, Cuelinks and others.</p>
+
+    <p>© 2026 Affiliate Marketplace. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
