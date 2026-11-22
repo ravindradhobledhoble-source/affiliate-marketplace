@@ -659,3 +659,72 @@ footer p {
   .product-image-wrap { height:155px; }
 }
 @media(max-width:390px) { .product-image-wrap { height:132px; } }
+/* DIFFERENT COLORS FOR EACH CAROUSEL SLIDE */
+
+#carousel .slide:nth-child(1) {
+  background: linear-gradient(120deg, #172554, #2563eb);
+}
+
+#carousel .slide:nth-child(2) {
+  background: linear-gradient(120deg, #35139c, #8b5cf6);
+}
+
+#carousel .slide:nth-child(3) {
+  background: linear-gradient(120deg, #064e3b, #10b981);
+}
+
+/* Carousel positioning */
+#carousel {
+  position: relative;
+}
+
+/* Arrow buttons */
+#carousel .carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  color: #172554;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+#carousel .prev {
+  left: 12px;
+}
+
+#carousel .next {
+  right: 12px;
+}
+
+/* Dots */
+#carousel .carousel-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 9px;
+  z-index: 5;
+}
+
+#carousel .dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+
+#carousel .dot.active {
+  background: #ffffff;
+  width: 25px;
+  border-radius: 10px;
+}
