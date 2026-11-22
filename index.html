@@ -1,7 +1,381 @@
-affiliate-marketplace/
-│
-├── index.html       ← Main Website
-├── admin.html       ← नया Admin Panel
-├── style.css        ← Website Design
-├── script.js        ← Website JavaScript
-└── worker.js        ← Cloudflare Worker
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover products, compare offers and explore deals from multiple affiliate shopping platforms.">
+  <meta name="theme-color" content="#211052">
+  <title>Affiliate Marketplace - Best Deals</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    /* Small additions for the existing premium style.css */
+    .slide:nth-child(1){background:linear-gradient(115deg,#172554,#2563eb)}
+    .slide:nth-child(2){background:linear-gradient(115deg,#35139c,#8b5cf6)}
+    .slide:nth-child(3){background:linear-gradient(115deg,#064e3b,#10b981)}
+    .carousel{position:relative}
+    .carousel-controls{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:12px}
+    .carousel-controls button,.category-chip{border:0;border-radius:22px;padding:9px 15px;background:#35139c;color:#fff;font-weight:700;cursor:pointer}
+    .carousel-dots{display:flex;gap:7px}
+    .carousel-dots button{width:9px;height:9px;padding:0;border-radius:50%;background:#a5a5c5}
+    .carousel-dots button.active{background:#6425ff}
+    .product-message{grid-column:1/-1;padding:20px;text-align:center;color:#718096}
+    .product-card img{max-width:100%;object-fit:contain}
+    .product-meta{font-size:12px;color:#718096;margin:5px 0}
+    .product-card .old-price{text-decoration:line-through;color:#718096;font-size:13px}
+    .category-chip.active{background:#ff9f00;color:#211052}
+    #loadMore[hidden]{display:none}
+    @media(max-width:650px){.carousel-controls{margin-bottom:8px}}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="/" class="logo">Affiliate Marketplace</a>
+    <form id="searchForm" role="search">
+      <input type="search" id="searchInput" placeholder="Search products, brands and deals..." aria-label="Search products">
+      <button type="submit">Search</button>
+    </form>
+    <button id="menuButton" type="button" aria-label="Open menu" aria-expanded="false">☰</button>
+  </header>
+
+  <nav class="navigation" id="mainNavigation">
+    <a href="/">Home</a>
+    <a href="#categories">Categories</a>
+    <a href="#products">Products</a>
+    <a href="#about">About Us</a>
+    <a href="#contact">Contact Us</a>
+  </nav>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="carousel" id="carousel">
+        <div class="slide active">
+          <h1>Discover Amazing Deals</h1>
+          <p>Find products and offers from multiple shopping platforms in one place.</p>
+          <a href="#products">Explore Products</a>
+        </div>
+        <div class="slide">
+          <h2>Top Shopping Platforms</h2>
+          <p>Explore offers from Amazon, Flipkart, Myntra and more.</p>
+          <a href="#categories">Explore Categories</a>
+        </div>
+        <div class="slide">
+          <h2>Daily Offers & Discounts</h2>
+          <p>Compare product details and discover exciting deals.</p>
+          <a href="#products">Shop Deals</a>
+        </div>
+      </div>
+      <div class="carousel-controls" aria-label="Carousel controls">
+        <button type="button" id="prevSlide" aria-label="Previous slide">‹</button>
+        <div class="carousel-dots" id="carouselDots"></div>
+        <button type="button" id="nextSlide" aria-label="Next slide">›</button>
+      </div>
+    </section>
+
+    <section id="categories">
+      <h2>Shop By Categories</h2>
+      <div id="categoryList" class="category-grid">
+        <p class="product-message">Categories will appear here when products are available.</p>
+      </div>
+    </section>
+
+    <section id="subcategories">
+      <h2>Popular Subcategories</h2>
+      <div id="subcategoryList" class="category-grid">
+        <p>Select a category to explore subcategories.</p>
+      </div>
+    </section>
+
+    <section id="products">
+      <h2>Featured Products &amp; Best Deals</h2>
+      <div class="filters">
+        <select id="platformFilter" aria-label="Filter by affiliate platform">
+          <option value="">All Affiliate Platforms</option>
+          <option>Amazon</option>
+          <option>Flipkart</option>
+          <option>Myntra</option>
+          <option>JioMart</option>
+          <option>EarnKaro</option>
+          <option>Cuelinks</option>
+          <option>Other</option>
+        </select>
+        <select id="typeFilter" aria-label="Filter by product type">
+          <option value="">All Product Types</option>
+          <option value="Physical">Physical</option>
+          <option value="Digital">Digital</option>
+        </select>
+      </div>
+      <div id="productStatus" class="product-message" role="status">Loading products from Cloudflare D1...</div>
+      <div id="productList" class="product-grid" aria-live="polite"></div>
+      <button id="loadMore" type="button">Load More Products</button>
+    </section>
+
+    <section id="about">
+      <h2>About Us</h2>
+      <p>Welcome to Affiliate Marketplace. Discover products, compare offers and explore deals from different affiliate shopping platforms.</p>
+    </section>
+
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>For enquiries and support, please contact our team.</p>
+    </section>
+  </main>
+
+  <footer>
+    <h3>Affiliate Marketplace</h3>
+    <div class="footer-links">
+      <a href="about-us.html">About Us</a>
+      <a href="contact-us.html">Contact Us</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+      <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
+    </div>
+    <p>Affiliate Platforms: Amazon, Flipkart, Myntra, JioMart, EarnKaro, Cuelinks and others.</p>
+    <p>© 2026 Affiliate Marketplace. All rights reserved.</p>
+  </footer>
+
+  <script>
+  (() => {
+    "use strict";
+
+    const API = "/api/products";
+    const PAGE_SIZE = 20;
+    const $ = (id) => document.getElementById(id);
+
+    const state = {
+      offset: 0,
+      total: 0,
+      loading: false,
+      search: "",
+      platform: "",
+      type: "",
+      category: "",
+      products: [],
+      categoryProducts: []
+    };
+
+    function showStatus(message) {
+      $("productStatus").textContent = message;
+      $("productStatus").hidden = false;
+    }
+
+    function hideStatus() {
+      $("productStatus").hidden = true;
+    }
+
+    function safeText(value) {
+      return value == null ? "" : String(value);
+    }
+
+    function makeElement(tag, className, text) {
+      const el = document.createElement(tag);
+      if (className) el.className = className;
+      if (text !== undefined) el.textContent = text;
+      return el;
+    }
+
+    function formatPrice(product) {
+      const text = safeText(product.price_text).trim();
+      if (text) return text;
+      const value = product.price_value ?? product.offer_price ?? product.price;
+      return value != null && value !== "" ? "₹" + Number(value).toLocaleString("en-IN") : "Price not available";
+    }
+
+    function renderProduct(product) {
+      const card = makeElement("article", "product-card");
+      const imageUrl = safeText(product.image_url);
+      if (imageUrl) {
+        const image = makeElement("img");
+        image.src = imageUrl;
+        image.alt = safeText(product.product_name || "Product");
+        image.loading = "lazy";
+        image.onerror = () => { image.style.display = "none"; };
+        card.appendChild(image);
+      }
+
+      const title = makeElement("h3", "", safeText(product.product_name || "Product"));
+      card.appendChild(title);
+
+      if (product.brand) card.appendChild(makeElement("p", "product-meta", "Brand: " + product.brand));
+      if (product.affiliate_platform) card.appendChild(makeElement("p", "product-meta", safeText(product.affiliate_platform)));
+
+      const price = makeElement("p", "price", formatPrice(product));
+      card.appendChild(price);
+
+      const mrp = product.original_price_value ?? product.mrp;
+      if (mrp != null && mrp !== "" && Number(mrp) > 0) {
+        card.appendChild(makeElement("p", "old-price", "MRP: ₹" + Number(mrp).toLocaleString("en-IN")));
+      }
+      if (product.discount_text || product.discount) {
+        card.appendChild(makeElement("p", "product-meta", safeText(product.discount_text || product.discount)));
+      }
+
+      const link = safeText(product.profit_link || product.profit_url || product.product_url);
+      if (link) {
+        const buy = makeElement("a", "", product.profit_link || product.profit_url ? "View Deal" : "View Product");
+        buy.href = link;
+        buy.target = "_blank";
+        buy.rel = "noopener sponsored";
+        card.appendChild(buy);
+      } else {
+        card.appendChild(makeElement("p", "product-meta", "Product link not available"));
+      }
+      return card;
+    }
+
+    function renderCategories(products) {
+      const categoryBox = $("categoryList");
+      const subBox = $("subcategoryList");
+      categoryBox.replaceChildren();
+      subBox.replaceChildren();
+
+      const categories = [...new Set(products.map(p => safeText(p.category).trim()).filter(Boolean))].sort();
+      if (!categories.length) {
+        categoryBox.appendChild(makeElement("p", "product-message", "No categories found yet."));
+      } else {
+        categories.forEach(category => {
+          const button = makeElement("button", "category-chip" + (state.category === category ? " active" : ""), category);
+          button.type = "button";
+          button.addEventListener("click", () => {
+            state.category = state.category === category ? "" : category;
+            resetAndLoad();
+          });
+          categoryBox.appendChild(button);
+        });
+      }
+
+      const subs = [...new Set(products
+        .filter(p => !state.category || p.category === state.category)
+        .map(p => safeText(p.subcategory).trim()).filter(Boolean))].sort();
+
+      if (!subs.length) {
+        subBox.appendChild(makeElement("p", "product-message", state.category ? "No subcategories found for this category." : "Subcategories will appear when product data includes them."));
+      } else {
+        subs.forEach(sub => {
+          const button = makeElement("button", "category-chip", sub);
+          button.type = "button";
+          button.addEventListener("click", () => {
+            $("searchInput").value = sub;
+            state.search = sub;
+            resetAndLoad();
+            $("products").scrollIntoView({behavior:"smooth"});
+          });
+          subBox.appendChild(button);
+        });
+      }
+    }
+
+    async function loadProducts(append = false) {
+      if (state.loading) return;
+      state.loading = true;
+      $("loadMore").disabled = true;
+      if (!append) {
+        $("productList").replaceChildren();
+        showStatus("Loading products from Cloudflare D1...");
+      }
+
+      const params = new URLSearchParams({
+        limit: String(PAGE_SIZE),
+        offset: String(state.offset)
+      });
+      if (state.search) params.set("search", state.search);
+      if (state.platform) params.set("platform", state.platform);
+      if (state.type) params.set("type", state.type);
+      if (state.category) params.set("category", state.category);
+
+      try {
+        const response = await fetch(API + "?" + params.toString(), {headers: {"Accept":"application/json"}});
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.error || "Products load नहीं हुए");
+
+        const products = Array.isArray(data.products) ? data.products : [];
+        state.total = Number(data.total || 0);
+        state.products = append ? state.products.concat(products) : products;
+        if (!append) state.categoryProducts = products;
+
+        if (!products.length && !append) {
+          showStatus(state.total === 0 ? "अभी कोई Active Product उपलब्ध नहीं है। Admin Panel से Product जोड़ें।" : "इस Filter में कोई Product नहीं मिला।");
+        } else {
+          hideStatus();
+          products.forEach(product => $("productList").appendChild(renderProduct(product)));
+        }
+
+        if (!append) renderCategories(state.categoryProducts);
+        state.offset += products.length;
+        $("loadMore").hidden = state.offset >= state.total || products.length === 0;
+      } catch (error) {
+        showStatus("Error: " + error.message + " — कृपया कुछ देर बाद Refresh करें।");
+        $("loadMore").hidden = true;
+      } finally {
+        state.loading = false;
+        $("loadMore").disabled = false;
+      }
+    }
+
+    function resetAndLoad() {
+      state.offset = 0;
+      state.total = 0;
+      state.products = [];
+      loadProducts(false);
+    }
+
+    $("searchForm").addEventListener("submit", event => {
+      event.preventDefault();
+      state.search = $("searchInput").value.trim();
+      resetAndLoad();
+    });
+    $("searchInput").addEventListener("search", () => {
+      state.search = $("searchInput").value.trim();
+      resetAndLoad();
+    });
+    $("platformFilter").addEventListener("change", event => {
+      state.platform = event.target.value;
+      resetAndLoad();
+    });
+    $("typeFilter").addEventListener("change", event => {
+      state.type = event.target.value;
+      resetAndLoad();
+    });
+    $("loadMore").addEventListener("click", () => loadProducts(true));
+
+    // Carousel controls and automatic rotation
+    const slides = [...document.querySelectorAll(".slide")];
+    let slideIndex = 0;
+    let carouselTimer;
+    const dots = $("carouselDots");
+
+    function showSlide(index) {
+      slideIndex = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => slide.classList.toggle("active", i === slideIndex));
+      [...dots.children].forEach((dot, i) => dot.classList.toggle("active", i === slideIndex));
+    }
+
+    slides.forEach((_, index) => {
+      const dot = makeElement("button", index === 0 ? "active" : "");
+      dot.type = "button";
+      dot.setAttribute("aria-label", "Go to slide " + (index + 1));
+      dot.addEventListener("click", () => showSlide(index));
+      dots.appendChild(dot);
+    });
+
+    $("prevSlide").addEventListener("click", () => showSlide(slideIndex - 1));
+    $("nextSlide").addEventListener("click", () => showSlide(slideIndex + 1));
+    function startCarousel() {
+      clearInterval(carouselTimer);
+      carouselTimer = setInterval(() => showSlide(slideIndex + 1), 5000);
+    }
+    $("carousel").addEventListener("mouseenter", () => clearInterval(carouselTimer));
+    $("carousel").addEventListener("mouseleave", startCarousel);
+    startCarousel();
+
+    // Mobile navigation toggle
+    $("menuButton").addEventListener("click", () => {
+      const nav = $("mainNavigation");
+      const isOpen = nav.classList.toggle("menu-open");
+      $("menuButton").setAttribute("aria-expanded", String(isOpen));
+    });
+
+    loadProducts(false);
+  })();
+  </script>
+</body>
+</html>
